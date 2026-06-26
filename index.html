@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Quiz - BlueLight Games Studio</title>
+    <style>
+        :root {
+            --bg-dark: #0a0e17;
+            --card-bg: #131a26;
+            --accent-pink: #ff2a74;
+            --accent-blue: #00f0ff;
+            --text-main: #e2e8f0;
+            --text-muted: #64748b;
+            --correct: #00ff87;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border: 2px solid #1e293b;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+            padding: 30px;
+            width: 100%;
+            max-width: 650px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* لافتة علوية راقية */
+        .studio-brand {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        #tvHeader {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+        }
+
+        /* تصميم رادار نظام الأدوار للأربعة لاعبين */
+        .players-radar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .player-card {
+            background: #1e293b;
+            padding: 10px 5px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+        }
+
+        .player-card.active {
+            color: white;
+            background: linear-gradient(135deg, var(--accent-pink), #bc00dd);
+            box-shadow: 0 0 15px rgba(255, 42, 116, 0.4);
+            border-color: var(--accent-pink);
+            transform: scale(1.05);
+        }
+
+        .player-card.done {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        #tvQuestion {
+            font-size: 24px;
+            line-height: 1.5;
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 30px;
+            min-height: 70px;
+        }
+
+        /* أزرار الخيارات الفخمة */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .btn-option {
+            background: #1e293b;
+            color: var(--text-main);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: right;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-option:hover {
+            border-color: var(--accent-blue);
+            background: #243249;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* نافذة النتيجة المودرن */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(5, 8, 15, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-blue);
+            padding: 30px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+        }
+
+        .modal-content h3 {
+            color: var(--accent-blue);
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .player-result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #1e293b;
+            font-size: 16px;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, var(--accent-blue), #00a8ff);
+            color: #000;
+            font-weight: bold;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-next:hover {
+            box-shadow: 0 0 15px var(--accent-blue);
+            transform: scale(1.02);
+        }
+
+        /* شاشة النهاية والنتائج وتتويج الفائز */
+        .leaderboard-row {
+            display: flex;
+            justify-content: space-between;
+            background: #1e293b;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .rank-1 { border-left: 5px solid gold; color: gold; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div class="studio-brand">BLUELIGHT GAMES STUDIO PRESENTS</div>
+    <div id="tvHeader">جاري تحضير الخادم...</div>
+    
+    <div class="players-radar">
+        <div id="pCard1" class="player-card active">اللاعب 1</div>
+        <div id="pCard2" class="player-card">اللاعب 2</div>
+        <div id="pCard3" class="player-card">اللاعب 3</div>
+        <div id="pCard4" class="player-card">اللاعب 4</div>
+    </div>
+
+    <div id="tvQuestion">تحميل أول سؤال...</div>
+    
+    <div class="options-grid" id="buttonsContainer">
+        <button class="btn-option" onclick="selectOption(0)"></button>
+        <button class="btn-option" onclick="selectOption(1)"></button>
+        <button class="btn-option" onclick="selectOption(2)"></button>
+        <button class="btn-option" onclick="selectOption(3)"></button>
+    </div>
+</div>
+
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <h3>📊 تقرير جولة السؤال</h3>
+        <div id="modalText"></div>
+        <div style="margin-top: 15px; color: var(--correct); font-weight: bold;" id="correctAnswerReveal"></div>
+        <button class="btn-next" onclick="nextQuestion()">تأكيد والانتقال للسؤال التالي ➡️</button>
+    </div>
+</div>
+
+<script>
+    // مصفوفة الـ 100 سؤال كاملة، بدون اختصار ومنسقة برمجياً لملائمة اهتماماتك التقنية والدراسية المتنوعة
+    const qList = [
+        // القسم 1: محركات الألعاب وتطويرها (1-20)
+        {category: "تطوير الألعاب", question: "ما هو المحرك الشهير المبني بـ C++ وتعد تقنية Nanite أحد ركائزه الرسومية؟", options: ["Unreal Engine 5", "Unity 6", "Godot", "CryEngine"], answer: "Unreal Engine 5"},
+        {category: "تطوير الألعاب", question: "في محرك Unity، ما هو المكون (Component) المسؤول عن تتبع حركة الذكاء الاصطناعي للأعداء؟", options: ["NavMesh Agent", "RigidBody", "AudioSource", "Box Collider"], answer: "NavMesh Agent"},
+        {category: "تطوير الألعاب", question: "ما اسم التقنية البرمجية المستخدمة في UE5 لمحاكاة الإضاءة الديناميكية المباشرة بالوقت الفعلي؟", options: ["Lumen", "Nanite", "Lightmapping", "RayTracing"], answer: "Lumen"},
+        {category: "تطوير الألعاب", question: "أي لغة برمجة تعتبر اللغة الأساسية والمدعومة رسمياً للكتابة داخل Unity حالياً؟", options: ["C#", "C++", "Java", "Python"], answer: "C#"},
+        {category: "تطوير الألعاب", question: "ما هو تصنيف استوديوهات الألعاب المكونة من أفراد أو فرق صغيرة مستقلة مالياً؟", options: ["Indie Studios", "AAA Studios", "Mobile Editors", "Publisher Teams"], answer: "Indie Studios"},
+        {category: "تطوير الألعاب", question: "ما اسم نظام الإضاءة الحجمية وحساب الظلال الفيزيائية المتقدمة للضوء في الألعاب؟", options: ["Volumetric Lighting", "Ambient Occlusion", "Texture Mapping", "Baking"], answer: "Volumetric Lighting"},
+        {category: "تطوير الألعاب", question: "في صناعة الألعاب، ماذا يرمز الاختصار المشهور NPC؟", options: ["شخصية غير قابلة للعب", "شخصية اللاعب الرئيسية", "مركز معالجة الشبكة", "الوحش النهائي في المرحلة"], answer: "شخصية غير قابلة للعب"},
+        {category: "تطوير الألعاب", question: "ما هي التقنية التي تسمح بتمرير المجسمات الهندسية بملايين المضلعات دون التأثير على أداء الكرت في UE5؟", options: ["Nanite", "Lumen", "Niagara", "Chaos Physics"], answer: "Nanite"},
+        {category: "تطوير الألعاب", question: "أي محرك ألعاب يعتبر مفتوح المصدر بالكامل ومجاني ويستخدم لغة GDScript؟", options: ["Godot", "Unity", "Unreal Engine", "GameMaker"], answer: "Godot"},
+        {category: "تطوير الألعاب", question: "ماذا يطلق على الكود المسؤول عن استشعار واكتشاف التصادم بين مجسمين في محركات الألعاب؟", options: ["Collider", "Material", "Shader", "Transform"], answer: "Collider"},
+        {category: "تطوير الألعاب", question: "في Unity، ما هو المكون المسؤول عن تطبيق الجاذبية والقوى الفيزيائية على الكائن؟", options: ["Rigidbody", "Mesh Filter", "NavMesh", "Camera"], answer: "Rigidbody"},
+        {category: "تطوير الألعاب", question: "ما هو نظام المؤثرات البصرية والجسيمات (Particles) المتقدم في محرك Unreal Engine 5؟", options: ["Niagara", "Cascade", "Shuriken", "Sprite Creator"], answer: "Niagara"},
+        {category: "تطوير الألعاب", question: "لعبة الرعب الشهيرة السابقة التي يقوم فيها اللاعب بجمع 8 صفحات في الغابة ليلاً هي:", options: ["Slender: The Eight Pages", "Outlast", "Amnesia", "Resident Evil"], answer: "Slender: The Eight Pages"},
+        {category: "تطوير الألعاب", question: "ماذا تسمى عملية تقليل عدد المضلعات داخل مجسم ثلاثي الأبعاد لتسريع أدائه في اللعبة؟", options: ["Optimization", "Baking", "Rigging", "Texturing"], answer: "Optimization"},
+        {category: "تطوير الألعاب", question: "ماذا نطلق على الهيكل العظمي الداخلي للمجسم ثلاثي الأبعاد المخصص لعمل حركات الإنميشن؟", options: ["Rigging / Skeleton", "Mesh", "Material", "Collider"], answer: "Rigging / Skeleton"},
+        {category: "تطوير الألعاب", question: "ما هو الاختصار الذي يطلق على ألعاب الفيديو ذات الميزانيات الضخمة والإنتاج العملاق؟", options: ["AAA", "Indie", "Beta", "RPG"], answer: "AAA"},
+        {category: "تطوير الألعاب", question: "أي أداة تستخدم بشكل أساسي لنحت وتصميم المجسمات ثلاثية الأبعاد والشخصيات قبل نقلها للمحرك؟", options: ["Blender", "VS Code", "Photoshop", "Termux"], answer: "Blender"},
+        {category: "تطوير الألعاب", question: "ماذا تسمى المشاهد السينمائية غير القابلة للعب التي تحكي قصة اللعبة بين المراحل؟", options: ["Cutscenes", "Gameplay", "Loading Screens", "Main Menu"], answer: "Cutscenes"},
+        {category: "تطوير الألعاب", question: "ما هو المكون المسؤول عن إصدار الترددات الصوتية والمؤثرات داخل بيئة الألعاب في Unity؟", options: ["AudioSource", "AudioListener", "Microphone", "SoundCollider"], answer: "AudioSource"},
+        {category: "تطوير الألعاب", question: "ماذا يسمى المستشعر البرمجي الذي يسمح للذكاء الاصطناعي بسماع خطوات أقدام اللاعب؟", options: ["Hearing/Noise Sensor", "Vision Cone", "Trigger Box", "Raycast"], answer: "Hearing/Noise Sensor"},
+
+        // القسم 2: تكنولوجيا الويب والبرمجة (21-40)
+        {category: "البرمجة والويب", question: "ما هي المكتبة الشهيرة المبنية على WebGL وتسمح بعرض مجسمات 3D في المتصفح عبر JavaScript؟", options: ["Three.js", "React", "Bootstrap", "jQuery"], answer: "Three.js"},
+        {category: "البرمجة والويب", question: "في صفحات الويب، ما هو الرمز (Tag) الأساسي المستخدم لتعريف فقرة نصية عادية؟", options: ["<p>", "<h1>", "<div>", "<a>"], answer: "<p>"},
+        {category: "البرمجة والويب", question: "ما هي التقنية البرمجية المسؤولة عن تنسيق المظهر الخارجي، الألوان، والخطوط لملفات الويب؟", options: ["CSS", "HTML", "JSON", "SQL"], answer: "CSS"},
+        {category: "البرمجة والويب", question: "أي لغة برمجة شهيرة تبدأ بشعار الأفعى وتستخدم بكثرة في الذكاء الاصطناعي وبناء السكربتات؟", options: ["Python", "Java", "PHP", "C#"], answer: "Python"},
+        {category: "البرمجة والويب", question: "ما هي البيئة التي تمكننا من تشغيل أكواد لغة JavaScript خارج المتصفح على السيرفر كـ Backend؟", options: ["Node.js", "Three.js", "HTML5", "Vercel"], answer: "Node.js"},
+        {category: "البرمجة والويب", question: "ماذا يطلق على الكود أو الأمر البرمجي الشرطي الذي ينفذ كوداً معيناً فقط في حال تحقق الشرط؟", options: ["If Statement", "For Loop", "Variable", "Function"], answer: "If Statement"},
+        {category: "البرمجة والويب", question: "ما اسم المنصة السحابية الشهيرة والأكثر استخداماً لاستضافة مواقع Frontend وتطبيقات Node.js مجاناً؟", options: ["Vercel", "GitHub", "Mediafire", "Termux"], answer: "Vercel"},
+        {category: "البرمجة والويب", question: "في JavaScript، ما هي الكلمة المحجوزة المستخدمة لتعريف متغير يمكن تغيير قيمته لاحقاً؟", options: ["let", "const", "fixed", "define"], answer: "let"},
+        {category: "البرمجة والويب", question: "ما هي المنصة العالمية رقم واحد التي يستعملها المبرمجون لحفظ وإدارة أكوادهم ومشاريعهم البرمجية؟", options: ["GitHub", "StackOverflow", "Discord", "Google Drive"], answer: "GitHub"},
+        {category: "البرمجة والويب", question: "في لغة CSS، ما هو الخيار الصحيح لتغيير المسافة الداخلية للعنصر (بين المحتوى والإطار)؟", options: ["padding", "margin", "border", "width"], answer: "padding"},
+        {category: "البرمجة والويب", question: "ماذا نطلق على عملية البحث عن الأخطاء البرمجية (Bugs) وحلها وتصحيح مسار الكود؟", options: ["Debugging", "Compiling", "Uploading", "Baking"], answer: "Debugging"},
+        {category: "البرمجة والويب", question: "في لغة البرمجة بايثون، كيف نقوم بطباعة نص أو متغير على الشاشة؟", options: ["print()", "console.log()", "System.out.println()", "echo"], answer: "print()"},
+        {category: "البرمجة والويب", question: "ما هو امتداد الملف النصي المسؤول عن تشغيل وتنفيذ سكربتات لغة بايثون مباشرة؟", options: [".py", ".js", ".html", ".exe"], answer: ".py"},
+        {category: "البرمجة والويب", question: "في تطوير الويب، ماذا نطلق على واجهة المستخدم الأمامية التي يراها ويتفاعل معها الزائر مباشرة؟", options: ["Frontend", "Backend", "Database", "API"], answer: "Frontend"},
+        {category: "البرمجة والويب", question: "ما هو الرمز المستخدم لعمل رابط تشعبي ينقل المستخدم لصفحة أخرى في HTML؟", options: ["<a>", "<img>", "<link>", "<p>"], answer: "<a>"},
+        {category: "البرمجة والويب", question: "ما هي قاعدة البيانات الشهيرة التي تعتمد على الجداول والاستعلامات الهيكلية SQL؟", options: ["MySQL", "MongoDB", "JSON File", "Redis"], answer: "MySQL"},
+        {category: "البرمجة والويب", question: "ما هي الدورة أو الحلقة البرمجية المستخدمة لتكرار كود معين لعدد محدد من المرات؟", options: ["For Loop", "If Condition", "Switch Case", "Variable"], answer: "For Loop"},
+        {category: "البرمجة والويب", question: "أي محرر أكواد مجاني وخفيف الوزن من مايكروسوفت يعتبر الخيار المفضل للمبرمجين عالمياً؟", options: ["VS Code", "Notepad", "Word", "Adobe XD"], answer: "VS Code"},
+        {category: "البرمجة والويب", question: "في لغة HTML، ما هو الرمز المسؤول عن إدراج صورة داخل الصفحة؟", options: ["<img>", "<picture>", "<src>", "<a>"], answer: "<img>"},
+        {category: "البرمجة والويب", question: "ما هو نوع المتغير البرمجي الذي لا يحمل سوى قيمتين فقط: إما صحيح (True) أو خاطئ (False)؟", options: ["Boolean", "Integer", "String", "Float"], answer: "Boolean"},
+
+        // القسم 3: شبكات وأمن وأنظمة (41-60)
+        {category: "الشبكات والأنظمة", question: "ما هي بنية الشبكات (Topology) التي ترتبط فيها كافة الأجهزة بنقطة أو جهاز مركزي (موزع)؟", options: ["Star Topology", "Bus Topology", "Ring Topology", "Mesh Topology"], answer: "Star Topology"},
+        {category: "الشبكات والأنظمة", question: "ما هو البروتوكول الأساسي المسؤول عن نقل حزم البيانات وضمان ترابط طبقات الإنترنت؟", options: ["TCP/IP", "HTTP", "FTP", "DNS"], answer: "TCP/IP"},
+        {category: "الشبكات والأنظمة", question: "ما اسم محاكي نظام لينكس وأسطر الأوامر المتقدم الذي يعمل على الهواتف بدون روت؟", options: ["Termux", "Kali Linux", "Ubuntu Mobile", "CMD Phone"], answer: "Termux"},
+        {category: "الشبكات والأنظمة", question: "ما هي توبولوجيا الشبكات التي تتصل بها الأجهزة واحداً تلو الآخر لتشكل مساراً دائرياً مغلقاً؟", options: ["Ring Topology", "Bus Topology", "Star Topology", "Tree Topology"], answer: "Ring Topology"},
+        {category: "الشبكات والأنظمة", question: "ما هو نظام التعديل البرمجي الشهير لأجهزة PS4 الذي يمنح صلاحيات كاملة لتشغيل ألعاب المحاكاة؟", options: ["GoldHEN / Jailbreak", "Linux OS", "RetroArch", "Android Mod"], answer: "GoldHEN / Jailbreak"},
+        {category: "الشبكات والأنظمة", question: "ما هو النظام المسؤول عن تحويل أسماء النطاقات (المواقع كـ google.com) إلى عناوين IP رقمية؟", options: ["DNS", "DHCP", "FTP", "SMTP"], answer: "DNS"},
+        {category: "الشبكات والأنظمة", question: "في الشبكات، ماذا يرمز الاختصار المشهور IP؟", options: ["Internet Protocol", "Internal Process", "Information Pack", "Instant Port"], answer: "Internet Protocol"},
+        {category: "الشبكات والأنظمة", question: "أي توزيعة من نظام Linux تعتبر الأشهر ومخصصة بالكامل لعمليات اختبار الاختراق والأمن السيبراني؟", options: ["Kali Linux", "Ubuntu", "Fedora", "Mint"], answer: "Kali Linux"},
+        {category: "الشبكات والأنظمة", question: "ما هو المكون المسؤول عن معالجة وإخراج الجرافيكس والرسوميات الثقيلة داخل الحاسوب؟", options: ["GPU (كرت الشاشة)", "CPU (المعالج)", "RAM (الذاكرة)", "SSD (الهارد)"], answer: "GPU (كرت الشاشة)"},
+        {category: "الشبكات والأنظمة", question: "ما هي بنية الشبكة التي تستخدم كابلاً رئيسياً واحداً تتفرع منه بقية الأجهزة؟", options: ["Bus Topology", "Star Topology", "Ring Topology", "Mesh Topology"], answer: "Bus Topology"},
+        {category: "الشبكات والأنظمة", question: "ما هو النظام البرمجي المتكامل الذي يسمح بتشغيل ألعاب الكونسول القديمة ومحاكاتها على أجهزة مختلفة؟", options: ["RetroArch", "GoldHEN", "Termux", "Unity"], answer: "RetroArch"},
+        {category: "الشبكات والأنظمة", question: "ما هي الذاكرة العشوائية المؤقتة في الحاسوب التي تفقد محتواها بالكامل بمجرد فصل التيار الكهربائي؟", options: ["RAM", "ROM", "SSD", "BIOS"], answer: "RAM"},
+        {category: "الشبكات والأنظمة", question: "ما هو الاختصار الذي يرمز لشبكة النطاق المحلي الصغير المحدود داخل منزل أو مكتب؟", options: ["LAN", "WAN", "MAN", "VPN"], answer: "LAN"},
+        {category: "الشبكات والأنظمة", question: "ما هي المعالجات المتقدمة ذات الهندسة المصغرة الفائقة التي تنتجها أبل لأجهزتها الحديثة مثل M5؟", options: ["Apple Silicon", "Intel Core", "AMD Ryzen", "Qualcomm Snapdragon"], answer: "Apple Silicon"},
+        {category: "الشبكات والأنظمة", question: "ماذا يطلق على الهكر الأخلاقي الذي يبحث عن ثغرات الأنظمة بنية إبلاغ الشركات لحمايتها؟", options: ["White Hat Hacker", "Black Hat Hacker", "Scammer", "Spammer"], answer: "White Hat Hacker"},
+        {category: "الشبكات والأنظمة", question: "ما اسم شبكة الويب العالمية الممتدة التي تربط الدول والقارات ببعضها؟", options: ["WAN", "LAN", "PAN", "SAN"], answer: "WAN"},
+        {category: "الشبكات والأنظمة", question: "أي منفذ أو بروتوكول يعتبر النسخة الآمنة والمشفرة لتصفح المواقع الإلكترونية؟", options: ["HTTPS", "HTTP", "FTP", "Telnet"], answer: "HTTPS"},
+        {category: "الشبكات والأنظمة", question: "ماذا يسمى الجدار البرمجي أو العتادي الذي يحمي الشبكة من الاختراقات والاتصالات الخبيثة؟", options: ["Firewall (جدار الحماية)", "Router", "Switch", "Server"], answer: "Firewall (جدار الحماية)"},
+        {category: "الشبكات والأنظمة", question: "ما هي وحدة التخزين الحديثة والسريعة جداً مقارنة بالهاردات التقليدية HDD؟", options: ["SSD", "RAM", "Floppy Disk", "CD-ROM"], answer: "SSD"},
+        {category: "الشبكات والأنظمة", question: "ماذا يسمى العنوان الفيزيائي الفريد والمثبت بكرت الشبكة لكل جهاز ولا يتغير أبداً؟", options: ["MAC Address", "IP Address", "DNS Client", "URL Code"], answer: "MAC Address"},
+
+        // القسم 4: علوم ورياضيات وثقافة (61-80)
+        {category: "علوم ودراسة", question: "ما هي النظرية الهندسية المستخدمة لحساب أطوال أضلاع المثلث القائم الزاوية؟", options: ["مبرهنة فيثاغورس", "مبرهنة طاليس", "قانون الجيب", "قانون نيوتن"], answer: "مبرهنة فيثاغورس"},
+        {category: "علوم ودراسة", question: "كم يساوي مجموع زوايا أي مثلث في الهندسة المستوية الإقليدية؟", options: ["180 درجة", "90 درجة", "360 درجة", "120 درجة"], answer: "180 درجة"},
+        {category: "علوم ودراسة", question: "أي عضو رئيسي في جسم الإنسان يحتوي على صمامات وشرايين تاجية ومسؤول عن ضخ الدم؟", options: ["القلب", "الكبد", "الرئتين", "الدماغ"], answer: "القلب"},
+        {category: "علوم ودراسة", question: "في مبرهنة طاليس، نستخدم نسب الأضلاع في حال وجود خطين متوازيين يقطعهما خطان متباعدان لحساب ماذا؟", options: ["الأطوال والمسافات", "المساحات الكلية", "الزوايا الحادة", "حجم المجسمات"], answer: "الأطوال والمسافات"},
+        {category: "علوم ودراسة", question: "ما هي العاصمة الحالية لدولة إيطاليا والتي تشتهر بمعلم الكولوسيوم التاريخي؟", options: ["روما", "ميلان", "باريس", "لندن"], answer: "روما"},
+        {category: "علوم ودراسة", question: "ما هي عاصمة المملكة المتحدة (بريطانيا) وتعتبر من أهم المراكز الطبية وجراحة القلب عالمياً؟", options: ["لندن", "مانشستر", "نيويورك", "دبلن"], answer: "لندن"},
+        {category: "علوم ودراسة", question: "ما هو اللقب الشهير المعترف به دولياً لمنتخب كرة القدم الوطني المغربي؟", options: ["أسود الأطلس", "الفراعنة", "النسور", "الخضر"], answer: "أسود الأطلس"},
+        {category: "علوم ودراسة", question: "حلوى مغربية تقليدية مشهورة جداً، تقلى بالزيت وتغطس بالعسل وترتبط بشهر رمضان المبارك:", options: ["الشباكية", "المسمن", "البغرير", "كعب الغزال"], answer: "الشباكية"},
+        {category: "علوم ودراسة", question: "ما هو الاسم الآخر الشهير لدرنات نبات 'حب العزيز' الغذائية والصحية المفيدة؟", options: ["Tiger Nuts (Chufa)", "Almonds", "Walnuts", "Sesame"], answer: "Tiger Nuts (Chufa)"},
+        {category: "علوم ودراسة", question: "ما هي لغة البرمجة التي تشبه قواعد كتابتها اللغة الإنجليزية وتعد الأهم للتعلم الأكاديمي الدولي؟", options: ["اللغة الإنجليزية", "اللغة اليابانية", "اللغة الفرنسية", "اللغة الألمانية"], answer: "اللغة الإنجليزية"},
+        {category: "علوم ودراسة", question: "ما هو الكسر المساوي لنصف العدد 100 في الرياضيات؟", options: ["50", "25", "10", "75"], answer: "50"},
+        {category: "علوم ودراسة", question: "الرمز العلمي للماء في الكيمياء هو:", options: ["H2O", "CO2", "O2", "NaCl"], answer: "H2O"},
+        {category: "علوم ودراسة", question: "ما هي أكبر قارة في العالم من حيث المساحة وعدد السكان؟", options: ["آسيا", "أفريقيا", "أوروبا", "أمريكا الشمالية"], answer: "آسيا"},
+        {category: "علوم ودراسة", question: "العالم الشهير الجاذبية بعد سقوط التفاحة على رأسه هو:", options: ["إسحاق نيوتن", "ألبيرت أينشتاين", "جاليليو", "تسلا"], answer: "إسحاق نيوتن"},
+        {category: "علوم ودراسة", question: "ما هو أصغر كوكب في المجموعة الشمسية؟", options: ["عطارد", "المريخ", "الأرض", "المشتري"], answer: "عطارد"},
+        {category: "علوم ودراسة", question: "أي غاز يمتصه النبات أثناء عملية البناء الضوئي ويطلق بدلاً منه الأكسجين؟", options: ["ثاني أكسيد الكربون", "النيتروجين", "الهيدروجين", "الأرجون"], answer: "ثاني أكسيد الكربون"},
+        {category: "علوم ودراسة", question: "ما هو أسرع حيوان بري على وجه الأرض؟", options: ["الفهد", "الأسد", "الغزال", "الحصان"], answer: "الفهد"},
+        {category: "علوم ودراسة", question: "كم عدد قارات كوكب الأرض؟", options: ["7", "5", "6", "8"], answer: "7"},
+        {category: "علوم ودراسة", question: "ما هو العضو المسؤول عن تصفية الدم وإخراج الفضلات على شكل بول في الجسم؟", options: ["الكلية", "المعدة", "الطحال", "البنكرياس"], answer: "الكلية"},
+        {category: "علوم ودراسة", question: "ما هو العدد الأولي من بين الأعداد التالية؟", options: ["7", "4", "9", "12"], answer: "7"},
+
+        // القسم 5: تحديات تقنية متنوعة وعامة (81-100)
+        {category: "تحديات عامة", question: "ما اسم نظام تشغيل الهواتف الذكية المملوك لشركة جوجل؟", options: ["Android", "iOS", "Windows Mobile", "Symbian"], answer: "Android"},
+        {category: "تحديات عامة", question: "ما اسم نظام تشغيل الحواسب الشخصية الأوسع انتشاراً من شركة مايكروسوفت؟", options: ["Windows", "macOS", "Linux", "ChromeOS"], answer: "Windows"},
+        {category: "تحديات عامة", question: "أي جهاز كونسول من شركة Sony حقق لقب جيل الألعاب الرابع؟", options: ["PS4", "PS5", "PS3", "Xbox One"], answer: "PS4"},
+        {category: "تحديات عامة", question: "ما هي لعبة البناء والمكعبات الشهيرة التي تحتوي على عالم لا نهائي ووحوش كالزومبي والاندرمان؟", options: ["Minecraft", "Roblox", "Fortnite", "GTA V"], answer: "Minecraft"},
+        {category: "تحديات عامة", question: "أي تطبيق دردشة يعتبر المفضل والمجتمع الأساسي للاعبين ومطوري الألعاب حول العالم؟", options: ["Discord", "WhatsApp", "Skype", "Zoom"], answer: "Discord"},
+        {category: "تحديات عامة", question: "ماذا يعني الاختصار التقني AI باللغة الإنجليزية؟", options: ["Artificial Intelligence", "Advanced Internet", "Automated Interface", "Active Integration"], answer: "Artificial Intelligence"},
+        {category: "تحديات عامة", question: "ما هو بروتوكول نقل الملفات الشهير عبر الشبكة؟", options: ["FTP", "HTTP", "SMTP", "DNS"], answer: "FTP"},
+        {category: "تحديات عامة", question: "في أجهزة الماكبوك، ما هو أحدث خط معالجات أبل فائقة القوة حتى الآن؟", options: ["M-Series (M5)", "Intel Core i9", "AMD Ryzen 9", "Snapdragon X"], answer: "M-Series (M5)"},
+        {category: "تحديات عامة", question: "ما اسم تطبيق المتصفح الشهير التابع لشركة جوجل؟", options: ["Google Chrome", "Firefox", "Safari", "Edge"], answer: "Google Chrome"},
+        {category: "تحديات عامة", question: "في لوحة مفاتيح الكمبيوتر، ما هو الزر الأكبر والمستخدم لعمل مسافة؟", options: ["Spacebar", "Enter", "Shift", "Backspace"], answer: "Spacebar"},
+        {category: "تحديات عامة", question: "ما هي التقنية اللاسلكية المستخدمة لربط الملحقات (كالفأرة والسماعات) بالكمبيوتر لمسافات قصيرة؟", options: ["Bluetooth", "Wi-Fi", "Infrared", "NFC"], answer: "Bluetooth"},
+        {category: "تحديات عامة", question: "ما اسم الشركة المالكة لتطبيقات فيسبوك، واتساب، وإنستغرام؟", options: ["Meta", "Google", "Microsoft", "Apple"], answer: "Meta"},
+        {category: "تحديات عامة", question: "أي كابل يستخدم بشكل أساسي لنقل الصورة والصوت بدقة عالية جداً من الكونسول إلى التلفاز؟", options: ["HDMI", "VGA", "USB", "AUX"], answer: "HDMI"},
+        {category: "تحديات عامة", question: "ما هو المصطلح التقني الذي يعبر عن الثغرات أو الأخطاء البرمجية المفاجئة في الألعاب؟", options: ["Glitch / Bug", "Feature", "Update", "Patch"], answer: "Glitch / Bug"},
+        {category: "تحديات عامة", question: "كم عدد البتات (Bits) التي تشكل حزمة بايت واحد (1 Byte)؟", options: ["8", "4", "16", "1024"], answer: "8"},
+        {category: "تحديات عامة", question: "ما هي اللعبة الجماعية الشهيرة التي تعتمد على البحث عن الخائن (Imposter) داخل سفينة فضائية؟", options: ["Among Us", "Fall Guys", "PUBG", "Valorant"], answer: "Among Us"},
+        {category: "تحديات عامة", question: "ما اسم متجر التطبيقات الرسمي المتواجد على كافة هواتف أندرويد؟", options: ["Google Play Store", "App Store", "Huawei AppGallery", "Steam"], answer: "Google Play Store"},
+        {category: "تحديات عامة", question: "في الويب، ماذا يرمز الاختصار المشهور URL؟", options: ["رابط الموقع الإلكتروني", "اسم الخادم الرئيسي", "حزمة التشفير الأمنية", "قاعدة البيانات المحمية"], answer: "رابط الموقع الإلكتروني"},
+        {category: "تحديات عامة", question: "ما هو الحيوان المصمم كشعار لمتصفح الويب الشهير Firefox؟", options: ["ثعلب الأحمر", "ذئب قطبي", "حيوان الباندا", "النمر الآسيوي"], answer: "ثعلب الأحمر"},
+        {category: "تحديات عامة", question: "ما اسم جهاز الألعاب المحمول الهجين من شركة نينتندو والذي يمكن فصل أذرع التحكم عنه؟", options: ["Nintendo Switch", "PSP", "GameBoy", "Nintendo DS"], answer: "Nintendo Switch"}
+    ];
+
+    let currentQIndex = 0;
+    let currentPlayer = 1;
+    let playerAnswers = {}; // لتخزين إجابة كل لاعب في الجولة الحالية
+    let playerScores = {1: 0, 2: 0, 3: 0, 4: 0};
+
+    const tvHeader = document.getElementById('tvHeader');
+    const tvQuestion = document.getElementById('tvQuestion');
+    const buttons = document.querySelectorAll('.btn-option');
+    const modal = document.getElementById('resultModal');
+    const modalText = document.getElementById('modalText');
+    const correctAnswerReveal = document.getElementById('correctAnswerReveal');
+
+    function updateQuiz() {
+        if (currentQIndex < qList.length) {
+            let qData = qList[currentQIndex];
+            
+            // تحديث الترويسة بالقسم وعداد الأسئلة
+            tvHeader.innerText = `السؤال الحالي: ${currentQIndex + 1} من أصل ${qList.length} | القسم: [ ${qData.category} ]`;
+            tvQuestion.innerText = qData.question;
+            
+            // إدارة الأزرار وعرض الخيارات الأربعة
+            for (let i = 0; i < 4; i++) {
+                buttons[i].innerText = qData.options[i];
+            }
+            
+            // تحديث بطاقات اللاعبين لإظهار الدور النشط الحالي
+            updatePlayerCards();
+        } else {
+            showFinalLeaderboard();
+        }
+    }
+
+    function updatePlayerCards() {
+        for (let p = 1; p <= 4; p++) {
+            let card = document.getElementById(`pCard${p}`);
+            card.className = "player-card"; // ريست
+            
+            if (p === currentPlayer) {
+                card.classList.add("active");
+            } else if (playerAnswers[p] !== undefined) {
+                card.classList.add("done");
+            }
+        }
+    }
+
+    function selectOption(btnIdx) {
+        let selectedText = buttons[btnIdx].innerText;
+        
+        // حفظ إجابة اللاعب الحالي للتحقق منها لاحقاً عند اكتمال جولة اللاعبين الأربعة
+        playerAnswers[currentPlayer] = selectedText;
+
+        // التحقق من الانتقال للاعب التالي أو إظهار النتيجة الجولة
+        if (currentPlayer < 4) {
+            currentPlayer++;
+            updateQuiz();
+        } else {
+            // كنز التحقق: الأربعة لاعبين اختاروا إجاباتهم بالكامل!
+            evaluateRoundAnswers();
+        }
+    }
+
+    function evaluateRoundAnswers() {
+        let qData = qList[currentQIndex];
+        let correctAnswer = qData.answer;
+        let reportHtml = "";
+
+        for (let p = 1; p <= 4; p++) {
+            let statusIcon = "❌";
+            if (playerAnswers[p] === correctAnswer) {
+                playerScores[p]++; // إضافة نقطة لسكور اللاعب الصحيح
+                statusIcon = "✅";
+            }
+            reportHtml += `
+                <div class="player-result-row">
+                    <span>👤 اللاعب ${p}</span>
+                    <span>اختياره: ${playerAnswers[p]} (${statusIcon})</span>
+                </div>
+            `;
+        }
+
+        modalText.innerHTML = reportHtml;
+        correctAnswerReveal.innerText = `💡 الإجابة الصحيحة الفخرية هي: ${correctAnswer}`;
+        modal.style.display = "flex";
+    }
+
+    function nextQuestion() {
+        modal.style.display = "none";
+        
+        // تصفير إعدادات الجولة استعداداً للسؤال القادم
+        currentPlayer = 1;
+        playerAnswers = {};
+        currentQIndex++;
+        
+        updateQuiz();
+    }
+
+    function showFinalLeaderboard() {
+        // إيقاف الواجهات العادية
+        tvHeader.style.display = 'none';
+        document.querySelector('.players-radar').style.display = 'none';
+        document.getElementById('buttonsContainer').style.display = 'none';
+        
+        // فرز وترتيب السكور لمعرفة بطل الاستوديو الفائز
+        let sortedPlayers = Object.keys(playerScores).map(p => {
+            return { id: p, score: playerScores[p] };
+        }).sort((a, b) => b.score - a.score);
+
+        let winPlayer = sortedPlayers[0].id;
+        tvQuestion.innerHTML = `👑 الفائز بلقب البطولة هو اللاعب رقم [ ${winPlayer} ]!<br><br>النتائج الختامية للمواجهة:`;
+        
+        let leaderboardHtml = "";
+        sortedPlayers.forEach((p, idx) => {
+            let rankClass = idx === 0 ? "rank-1" : "";
+            leaderboardHtml += `
+                <div class="leaderboard-row ${rankClass}">
+                    <span>الترتيب ${idx + 1}: اللاعب ${p.id}</span>
+                    <span>${p.score} نقطة</span>
+                </div>
+            `;
+        });
+        
+        tvQuestion.innerHTML += leaderboardHtml;
+    }
+
+    // انطلاق محرك اللعبة
+    updateQuiz();
+</script>
+
+</body>
+</html>
