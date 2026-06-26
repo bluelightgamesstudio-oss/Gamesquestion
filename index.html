@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mega Quiz - BlueLight Games Studio</title>
+    <title>Mega Quiz - 10 Categories</title>
     <style>
         :root {
             --bg-dark: #0a0e17;
@@ -40,7 +40,6 @@
             position: relative;
         }
 
-        /* لافتة علوية راقية */
         .studio-brand {
             font-size: 11px;
             letter-spacing: 2px;
@@ -58,7 +57,6 @@
             padding-bottom: 10px;
         }
 
-        /* تصميم رادار نظام الأدوار للأربعة لاعبين */
         .players-radar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -100,7 +98,6 @@
             min-height: 70px;
         }
 
-        /* أزرار الخيارات الفخمة */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -129,7 +126,6 @@
             transform: translateY(-2px);
         }
 
-        /* نافذة النتيجة المودرن */
         .modal {
             display: none;
             position: fixed;
@@ -185,7 +181,6 @@
             transform: scale(1.02);
         }
 
-        /* شاشة النهاية والنتائج وتتويج الفائز */
         .leaderboard-row {
             display: flex;
             justify-content: space-between;
@@ -232,122 +227,132 @@
 </div>
 
 <script>
-    // مصفوفة الـ 100 سؤال كاملة، بدون اختصار ومنسقة برمجياً لملائمة اهتماماتك التقنية والدراسية المتنوعة
+    // مصفوفة الـ 100 سؤال موزعة على 10 أقسام مختلفة كلياً (10 أسئلة لكل قسم)
     const qList = [
-        // القسم 1: محركات الألعاب وتطويرها (1-20)
-        {category: "تطوير الألعاب", question: "ما هو المحرك الشهير المبني بـ C++ وتعد تقنية Nanite أحد ركائزه الرسومية؟", options: ["Unreal Engine 5", "Unity 6", "Godot", "CryEngine"], answer: "Unreal Engine 5"},
-        {category: "تطوير الألعاب", question: "في محرك Unity، ما هو المكون (Component) المسؤول عن تتبع حركة الذكاء الاصطناعي للأعداء؟", options: ["NavMesh Agent", "RigidBody", "AudioSource", "Box Collider"], answer: "NavMesh Agent"},
-        {category: "تطوير الألعاب", question: "ما اسم التقنية البرمجية المستخدمة في UE5 لمحاكاة الإضاءة الديناميكية المباشرة بالوقت الفعلي؟", options: ["Lumen", "Nanite", "Lightmapping", "RayTracing"], answer: "Lumen"},
-        {category: "تطوير الألعاب", question: "أي لغة برمجة تعتبر اللغة الأساسية والمدعومة رسمياً للكتابة داخل Unity حالياً؟", options: ["C#", "C++", "Java", "Python"], answer: "C#"},
-        {category: "تطوير الألعاب", question: "ما هو تصنيف استوديوهات الألعاب المكونة من أفراد أو فرق صغيرة مستقلة مالياً؟", options: ["Indie Studios", "AAA Studios", "Mobile Editors", "Publisher Teams"], answer: "Indie Studios"},
-        {category: "تطوير الألعاب", question: "ما اسم نظام الإضاءة الحجمية وحساب الظلال الفيزيائية المتقدمة للضوء في الألعاب؟", options: ["Volumetric Lighting", "Ambient Occlusion", "Texture Mapping", "Baking"], answer: "Volumetric Lighting"},
-        {category: "تطوير الألعاب", question: "في صناعة الألعاب، ماذا يرمز الاختصار المشهور NPC؟", options: ["شخصية غير قابلة للعب", "شخصية اللاعب الرئيسية", "مركز معالجة الشبكة", "الوحش النهائي في المرحلة"], answer: "شخصية غير قابلة للعب"},
-        {category: "تطوير الألعاب", question: "ما هي التقنية التي تسمح بتمرير المجسمات الهندسية بملايين المضلعات دون التأثير على أداء الكرت في UE5؟", options: ["Nanite", "Lumen", "Niagara", "Chaos Physics"], answer: "Nanite"},
-        {category: "تطوير الألعاب", question: "أي محرك ألعاب يعتبر مفتوح المصدر بالكامل ومجاني ويستخدم لغة GDScript؟", options: ["Godot", "Unity", "Unreal Engine", "GameMaker"], answer: "Godot"},
-        {category: "تطوير الألعاب", question: "ماذا يطلق على الكود المسؤول عن استشعار واكتشاف التصادم بين مجسمين في محركات الألعاب؟", options: ["Collider", "Material", "Shader", "Transform"], answer: "Collider"},
-        {category: "تطوير الألعاب", question: "في Unity، ما هو المكون المسؤول عن تطبيق الجاذبية والقوى الفيزيائية على الكائن؟", options: ["Rigidbody", "Mesh Filter", "NavMesh", "Camera"], answer: "Rigidbody"},
-        {category: "تطوير الألعاب", question: "ما هو نظام المؤثرات البصرية والجسيمات (Particles) المتقدم في محرك Unreal Engine 5؟", options: ["Niagara", "Cascade", "Shuriken", "Sprite Creator"], answer: "Niagara"},
-        {category: "تطوير الألعاب", question: "لعبة الرعب الشهيرة السابقة التي يقوم فيها اللاعب بجمع 8 صفحات في الغابة ليلاً هي:", options: ["Slender: The Eight Pages", "Outlast", "Amnesia", "Resident Evil"], answer: "Slender: The Eight Pages"},
-        {category: "تطوير الألعاب", question: "ماذا تسمى عملية تقليل عدد المضلعات داخل مجسم ثلاثي الأبعاد لتسريع أدائه في اللعبة؟", options: ["Optimization", "Baking", "Rigging", "Texturing"], answer: "Optimization"},
-        {category: "تطوير الألعاب", question: "ماذا نطلق على الهيكل العظمي الداخلي للمجسم ثلاثي الأبعاد المخصص لعمل حركات الإنميشن؟", options: ["Rigging / Skeleton", "Mesh", "Material", "Collider"], answer: "Rigging / Skeleton"},
-        {category: "تطوير الألعاب", question: "ما هو الاختصار الذي يطلق على ألعاب الفيديو ذات الميزانيات الضخمة والإنتاج العملاق؟", options: ["AAA", "Indie", "Beta", "RPG"], answer: "AAA"},
-        {category: "تطوير الألعاب", question: "أي أداة تستخدم بشكل أساسي لنحت وتصميم المجسمات ثلاثية الأبعاد والشخصيات قبل نقلها للمحرك؟", options: ["Blender", "VS Code", "Photoshop", "Termux"], answer: "Blender"},
-        {category: "تطوير الألعاب", question: "ماذا تسمى المشاهد السينمائية غير القابلة للعب التي تحكي قصة اللعبة بين المراحل؟", options: ["Cutscenes", "Gameplay", "Loading Screens", "Main Menu"], answer: "Cutscenes"},
-        {category: "تطوير الألعاب", question: "ما هو المكون المسؤول عن إصدار الترددات الصوتية والمؤثرات داخل بيئة الألعاب في Unity؟", options: ["AudioSource", "AudioListener", "Microphone", "SoundCollider"], answer: "AudioSource"},
-        {category: "تطوير الألعاب", question: "ماذا يسمى المستشعر البرمجي الذي يسمح للذكاء الاصطناعي بسماع خطوات أقدام اللاعب؟", options: ["Hearing/Noise Sensor", "Vision Cone", "Trigger Box", "Raycast"], answer: "Hearing/Noise Sensor"},
+        // === القسم 1: تطوير ألعاب الرعب والمحركات (1 - 10) ===
+        {category: "تطوير الألعاب والأنميشن", question: "ما هو المحرك الشهير المبني بـ C++ وتعد تقنية Nanite أحد ركائزه الرسومية؟", options: ["Unreal Engine 5", "Unity 6", "Godot", "CryEngine"], answer: "Unreal Engine 5"},
+        {category: "تطوير الألعاب والأنميشن", question: "في محرك Unity، ما هو المكون (Component) المسؤول عن تتبع حركة الذكاء الاصطناعي للأعداء؟", options: ["NavMesh Agent", "RigidBody", "AudioSource", "Box Collider"], answer: "NavMesh Agent"},
+        {category: "تطوير الألعاب والأنميشن", question: "ما اسم التقنية البرمجية المستخدمة في UE5 لمحاكاة الإضاءة الديناميكية المباشرة بالوقت الفعلي؟", options: ["Lumen", "Nanite", "Lightmapping", "RayTracing"], answer: "Lumen"},
+        {category: "تطوير الألعاب والأنميشن", question: "أي لغة برمجة تعتبر اللغة الأساسية والمدعومة رسمياً للكتابة داخل Unity حالياً؟", options: ["C#", "C++", "Java", "Python"], answer: "C#"},
+        {category: "تطوير الألعاب والأنميشن", question: "ماذا يسمى المستشعر البرمجي الذي يسمح للذكاء الاصطناعي بسماع خطوات أقدام اللاعب في ألعاب الرعب؟", options: ["Hearing/Noise Sensor", "Vision Cone", "Trigger Box", "Raycast"], answer: "Hearing/Noise Sensor"},
+        {category: "تطوير الألعاب والأنميشن", question: "ما اسم نظام الإضاءة الحجمية وحساب الظلال الفيزيائية المتقدمة للضوء في الألعاب؟", options: ["Volumetric Lighting", "Ambient Occlusion", "Texture Mapping", "Baking"], answer: "Volumetric Lighting"},
+        {category: "تطوير الألعاب والأنميشن", question: "ماذا تسمى عملية تقليل عدد المضلعات داخل مجسم ثلاثي الأبعاد لتسريع أدائه في اللعبة؟", options: ["Optimization", "Baking", "Rigging", "Texturing"], answer: "Optimization"},
+        {category: "تطوير الألعاب والأنميشن", question: "ماذا نطلق على الهيكل العظمي الداخلي للمجسم ثلاثي الأبعاد المخصص لعمل حركات الإنميشن؟", options: ["Rigging / Skeleton", "Mesh", "Material", "Collider"], answer: "Rigging / Skeleton"},
+        {category: "تطوير الألعاب والأنميشن", question: "ما هو المكون المسؤول عن إصدار الترددات الصوتية والمؤثرات داخل بيئة الألعاب في Unity؟", options: ["AudioSource", "AudioListener", "Microphone", "SoundCollider"], answer: "AudioSource"},
+        {category: "تطوير الألعاب والأنميشن", question: "في صناعة الألعاب، ماذا يرمز الاختصار المشهور NPC؟", options: ["شخصية غير قابلة للعب", "شخصية اللاعب الرئيسية", "مركز معالجة الشبكة", "الوحش النهائي في المرحلة"], answer: "شخصية غير قابلة للعب"},
 
-        // القسم 2: تكنولوجيا الويب والبرمجة (21-40)
-        {category: "البرمجة والويب", question: "ما هي المكتبة الشهيرة المبنية على WebGL وتسمح بعرض مجسمات 3D في المتصفح عبر JavaScript؟", options: ["Three.js", "React", "Bootstrap", "jQuery"], answer: "Three.js"},
-        {category: "البرمجة والويب", question: "في صفحات الويب، ما هو الرمز (Tag) الأساسي المستخدم لتعريف فقرة نصية عادية؟", options: ["<p>", "<h1>", "<div>", "<a>"], answer: "<p>"},
-        {category: "البرمجة والويب", question: "ما هي التقنية البرمجية المسؤولة عن تنسيق المظهر الخارجي، الألوان، والخطوط لملفات الويب؟", options: ["CSS", "HTML", "JSON", "SQL"], answer: "CSS"},
-        {category: "البرمجة والويب", question: "أي لغة برمجة شهيرة تبدأ بشعار الأفعى وتستخدم بكثرة في الذكاء الاصطناعي وبناء السكربتات؟", options: ["Python", "Java", "PHP", "C#"], answer: "Python"},
-        {category: "البرمجة والويب", question: "ما هي البيئة التي تمكننا من تشغيل أكواد لغة JavaScript خارج المتصفح على السيرفر كـ Backend؟", options: ["Node.js", "Three.js", "HTML5", "Vercel"], answer: "Node.js"},
-        {category: "البرمجة والويب", question: "ماذا يطلق على الكود أو الأمر البرمجي الشرطي الذي ينفذ كوداً معيناً فقط في حال تحقق الشرط؟", options: ["If Statement", "For Loop", "Variable", "Function"], answer: "If Statement"},
-        {category: "البرمجة والويب", question: "ما اسم المنصة السحابية الشهيرة والأكثر استخداماً لاستضافة مواقع Frontend وتطبيقات Node.js مجاناً؟", options: ["Vercel", "GitHub", "Mediafire", "Termux"], answer: "Vercel"},
-        {category: "البرمجة والويب", question: "في JavaScript، ما هي الكلمة المحجوزة المستخدمة لتعريف متغير يمكن تغيير قيمته لاحقاً؟", options: ["let", "const", "fixed", "define"], answer: "let"},
-        {category: "البرمجة والويب", question: "ما هي المنصة العالمية رقم واحد التي يستعملها المبرمجون لحفظ وإدارة أكوادهم ومشاريعهم البرمجية؟", options: ["GitHub", "StackOverflow", "Discord", "Google Drive"], answer: "GitHub"},
-        {category: "البرمجة والويب", question: "في لغة CSS، ما هو الخيار الصحيح لتغيير المسافة الداخلية للعنصر (بين المحتوى والإطار)؟", options: ["padding", "margin", "border", "width"], answer: "padding"},
-        {category: "البرمجة والويب", question: "ماذا نطلق على عملية البحث عن الأخطاء البرمجية (Bugs) وحلها وتصحيح مسار الكود؟", options: ["Debugging", "Compiling", "Uploading", "Baking"], answer: "Debugging"},
-        {category: "البرمجة والويب", question: "في لغة البرمجة بايثون، كيف نقوم بطباعة نص أو متغير على الشاشة؟", options: ["print()", "console.log()", "System.out.println()", "echo"], answer: "print()"},
-        {category: "البرمجة والويب", question: "ما هو امتداد الملف النصي المسؤول عن تشغيل وتنفيذ سكربتات لغة بايثون مباشرة؟", options: [".py", ".js", ".html", ".exe"], answer: ".py"},
-        {category: "البرمجة والويب", question: "في تطوير الويب، ماذا نطلق على واجهة المستخدم الأمامية التي يراها ويتفاعل معها الزائر مباشرة؟", options: ["Frontend", "Backend", "Database", "API"], answer: "Frontend"},
-        {category: "البرمجة والويب", question: "ما هو الرمز المستخدم لعمل رابط تشعبي ينقل المستخدم لصفحة أخرى في HTML؟", options: ["<a>", "<img>", "<link>", "<p>"], answer: "<a>"},
-        {category: "البرمجة والويب", question: "ما هي قاعدة البيانات الشهيرة التي تعتمد على الجداول والاستعلامات الهيكلية SQL؟", options: ["MySQL", "MongoDB", "JSON File", "Redis"], answer: "MySQL"},
-        {category: "البرمجة والويب", question: "ما هي الدورة أو الحلقة البرمجية المستخدمة لتكرار كود معين لعدد محدد من المرات؟", options: ["For Loop", "If Condition", "Switch Case", "Variable"], answer: "For Loop"},
-        {category: "البرمجة والويب", question: "أي محرر أكواد مجاني وخفيف الوزن من مايكروسوفت يعتبر الخيار المفضل للمبرمجين عالمياً؟", options: ["VS Code", "Notepad", "Word", "Adobe XD"], answer: "VS Code"},
-        {category: "البرمجة والويب", question: "في لغة HTML، ما هو الرمز المسؤول عن إدراج صورة داخل الصفحة؟", options: ["<img>", "<picture>", "<src>", "<a>"], answer: "<img>"},
-        {category: "البرمجة والويب", question: "ما هو نوع المتغير البرمجي الذي لا يحمل سوى قيمتين فقط: إما صحيح (True) أو خاطئ (False)؟", options: ["Boolean", "Integer", "String", "Float"], answer: "Boolean"},
+        // === القسم 2: برمجة الويب و JavaScript (11 - 20) ===
+        {category: "برمجة وتطوير الويب", question: "ما هي المكتبة الشهيرة المبنية على WebGL وتسمح بعرض مجسمات 3D في المتصفح عبر JavaScript؟", options: ["Three.js", "React", "Bootstrap", "jQuery"], answer: "Three.js"},
+        {category: "برمجة وتطوير الويب", question: "في صفحات الويب، ما هو الرمز (Tag) الأساسي المستخدم لتعريف فقرة نصية عادية؟", options: ["<p>", "<h1>", "<div>", "<a>"], answer: "<p>"},
+        {category: "برمجة وتطوير الويب", question: "ما هي التقنية البرمجية المسؤولة عن تنسيق المظهر الخارجي، الألوان، والخطوط لملفات الويب؟", options: ["CSS", "HTML", "JSON", "SQL"], answer: "CSS"},
+        {category: "برمجة وتطوير الويب", question: "ما هي البيئة التي تمكننا من تشغيل أكواد لغة JavaScript خارج المتصفح على السيرفر كـ Backend؟", options: ["Node.js", "Three.js", "HTML5", "Vercel"], answer: "Node.js"},
+        {category: "برمجة وتطوير الويب", question: "ما اسم المنصة السحابية الشهيرة والأكثر استخداماً لاستضافة مواقع Frontend وتطبيقات Node.js مجاناً؟", options: ["Vercel", "GitHub", "Mediafire", "Termux"], answer: "Vercel"},
+        {category: "برمجة وتطوير الويب", question: "في JavaScript، ما هي الكلمة المحجوزة المستخدمة لتعريف متغير يمكن تغيير قيمته لاحقاً؟", options: ["let", "const", "fixed", "define"], answer: "let"},
+        {category: "برمجة وتطوير الويب", question: "في تطوير الويب، ماذا نطلق على واجهة المستخدم الأمامية التي يراها ويتفاعل معها الزائر مباشرة؟", options: ["Frontend", "Backend", "Database", "API"], answer: "Frontend"},
+        {category: "برمجة وتطوير الويب", question: "ما هو الرمز المستخدم لعمل رابط تشعبي ينقل المستخدم لصفحة أخرى في HTML؟", options: ["<a>", "<img>", "<link>", "<p>"], answer: "<a>"},
+        {category: "برمجة وتطوير الويب", question: "في لغة CSS، ما هو الخيار الصحيح لتغيير المسافة الداخلية للعنصر (بين المحتوى والإطار)؟", options: ["padding", "margin", "border", "width"], answer: "padding"},
+        {category: "برمجة وتطوير الويب", question: "ما هو نوع المتغير البرمجي الذي لا يحمل سوى قيمتين فقط: إما صحيح (True) أو خاطئ (False)؟", options: ["Boolean", "Integer", "String", "Float"], answer: "Boolean"},
 
-        // القسم 3: شبكات وأمن وأنظمة (41-60)
-        {category: "الشبكات والأنظمة", question: "ما هي بنية الشبكات (Topology) التي ترتبط فيها كافة الأجهزة بنقطة أو جهاز مركزي (موزع)؟", options: ["Star Topology", "Bus Topology", "Ring Topology", "Mesh Topology"], answer: "Star Topology"},
-        {category: "الشبكات والأنظمة", question: "ما هو البروتوكول الأساسي المسؤول عن نقل حزم البيانات وضمان ترابط طبقات الإنترنت؟", options: ["TCP/IP", "HTTP", "FTP", "DNS"], answer: "TCP/IP"},
-        {category: "الشبكات والأنظمة", question: "ما اسم محاكي نظام لينكس وأسطر الأوامر المتقدم الذي يعمل على الهواتف بدون روت؟", options: ["Termux", "Kali Linux", "Ubuntu Mobile", "CMD Phone"], answer: "Termux"},
-        {category: "الشبكات والأنظمة", question: "ما هي توبولوجيا الشبكات التي تتصل بها الأجهزة واحداً تلو الآخر لتشكل مساراً دائرياً مغلقاً؟", options: ["Ring Topology", "Bus Topology", "Star Topology", "Tree Topology"], answer: "Ring Topology"},
-        {category: "الشبكات والأنظمة", question: "ما هو نظام التعديل البرمجي الشهير لأجهزة PS4 الذي يمنح صلاحيات كاملة لتشغيل ألعاب المحاكاة؟", options: ["GoldHEN / Jailbreak", "Linux OS", "RetroArch", "Android Mod"], answer: "GoldHEN / Jailbreak"},
-        {category: "الشبكات والأنظمة", question: "ما هو النظام المسؤول عن تحويل أسماء النطاقات (المواقع كـ google.com) إلى عناوين IP رقمية؟", options: ["DNS", "DHCP", "FTP", "SMTP"], answer: "DNS"},
-        {category: "الشبكات والأنظمة", question: "في الشبكات، ماذا يرمز الاختصار المشهور IP؟", options: ["Internet Protocol", "Internal Process", "Information Pack", "Instant Port"], answer: "Internet Protocol"},
-        {category: "الشبكات والأنظمة", question: "أي توزيعة من نظام Linux تعتبر الأشهر ومخصصة بالكامل لعمليات اختبار الاختراق والأمن السيبراني؟", options: ["Kali Linux", "Ubuntu", "Fedora", "Mint"], answer: "Kali Linux"},
-        {category: "الشبكات والأنظمة", question: "ما هو المكون المسؤول عن معالجة وإخراج الجرافيكس والرسوميات الثقيلة داخل الحاسوب؟", options: ["GPU (كرت الشاشة)", "CPU (المعالج)", "RAM (الذاكرة)", "SSD (الهارد)"], answer: "GPU (كرت الشاشة)"},
-        {category: "الشبكات والأنظمة", question: "ما هي بنية الشبكة التي تستخدم كابلاً رئيسياً واحداً تتفرع منه بقية الأجهزة؟", options: ["Bus Topology", "Star Topology", "Ring Topology", "Mesh Topology"], answer: "Bus Topology"},
-        {category: "الشبكات والأنظمة", question: "ما هو النظام البرمجي المتكامل الذي يسمح بتشغيل ألعاب الكونسول القديمة ومحاكاتها على أجهزة مختلفة؟", options: ["RetroArch", "GoldHEN", "Termux", "Unity"], answer: "RetroArch"},
-        {category: "الشبكات والأنظمة", question: "ما هي الذاكرة العشوائية المؤقتة في الحاسوب التي تفقد محتواها بالكامل بمجرد فصل التيار الكهربائي؟", options: ["RAM", "ROM", "SSD", "BIOS"], answer: "RAM"},
-        {category: "الشبكات والأنظمة", question: "ما هو الاختصار الذي يرمز لشبكة النطاق المحلي الصغير المحدود داخل منزل أو مكتب؟", options: ["LAN", "WAN", "MAN", "VPN"], answer: "LAN"},
-        {category: "الشبكات والأنظمة", question: "ما هي المعالجات المتقدمة ذات الهندسة المصغرة الفائقة التي تنتجها أبل لأجهزتها الحديثة مثل M5؟", options: ["Apple Silicon", "Intel Core", "AMD Ryzen", "Qualcomm Snapdragon"], answer: "Apple Silicon"},
-        {category: "الشبكات والأنظمة", question: "ماذا يطلق على الهكر الأخلاقي الذي يبحث عن ثغرات الأنظمة بنية إبلاغ الشركات لحمايتها؟", options: ["White Hat Hacker", "Black Hat Hacker", "Scammer", "Spammer"], answer: "White Hat Hacker"},
-        {category: "الشبكات والأنظمة", question: "ما اسم شبكة الويب العالمية الممتدة التي تربط الدول والقارات ببعضها؟", options: ["WAN", "LAN", "PAN", "SAN"], answer: "WAN"},
-        {category: "الشبكات والأنظمة", question: "أي منفذ أو بروتوكول يعتبر النسخة الآمنة والمشفرة لتصفح المواقع الإلكترونية؟", options: ["HTTPS", "HTTP", "FTP", "Telnet"], answer: "HTTPS"},
-        {category: "الشبكات والأنظمة", question: "ماذا يسمى الجدار البرمجي أو العتادي الذي يحمي الشبكة من الاختراقات والاتصالات الخبيثة؟", options: ["Firewall (جدار الحماية)", "Router", "Switch", "Server"], answer: "Firewall (جدار الحماية)"},
-        {category: "الشبكات والأنظمة", question: "ما هي وحدة التخزين الحديثة والسريعة جداً مقارنة بالهاردات التقليدية HDD؟", options: ["SSD", "RAM", "Floppy Disk", "CD-ROM"], answer: "SSD"},
-        {category: "الشبكات والأنظمة", question: "ماذا يسمى العنوان الفيزيائي الفريد والمثبت بكرت الشبكة لكل جهاز ولا يتغير أبداً؟", options: ["MAC Address", "IP Address", "DNS Client", "URL Code"], answer: "MAC Address"},
+        // === القسم 3: هندسة الشبكات والأنظمة (21 - 30) ===
+        {category: "هندسة الشبكات والأنظمة", question: "ما هي بنية الشبكات (Topology) التي ترتبط فيها كافة الأجهزة بنقطة أو جهاز مركزي (موزع)؟", options: ["Star Topology", "Bus Topology", "Ring Topology", "Mesh Topology"], answer: "Star Topology"},
+        {category: "هندسة الشبكات والأنظمة", question: "ما هو البروتوكول الأساسي المسؤول عن نقل حزم البيانات وضمان ترابط طبقات الإنترنت؟", options: ["TCP/IP", "HTTP", "FTP", "DNS"], answer: "TCP/IP"},
+        {category: "هندسة الشبكات والأنظمة", question: "ما هي توبولوجيا الشبكات التي تتصل بها الأجهزة واحداً تلو الآخر لتشكل مساراً دائرياً مغلقاً؟", options: ["Ring Topology", "Bus Topology", "Star Topology", "Tree Topology"], answer: "Ring Topology"},
+        {category: "هندسة الشبكات والأنظمة", question: "ما هي بنية الشبكة التي تستخدم كابلاً رئيسياً واحداً تتفرع منه بقية الأجهزة؟", options: ["Bus Topology", "Star Topology", "Ring Topology", "Mesh Topology"], answer: "Bus Topology"},
+        {category: "هندسة الشبكات والأنظمة", question: "في الشبكات، ماذا يرمز الاختصار المشهور IP؟", options: ["Internet Protocol", "Internal Process", "Information Pack", "Instant Port"], answer: "Internet Protocol"},
+        {category: "هندسة الشبكات والأنظمة", question: "ما هو النظام المسؤول عن تحويل أسماء النطاقات (المواقع كـ google.com) إلى عناوين IP رقمية؟", options: ["DNS", "DHCP", "FTP", "SMTP"], answer: "DNS"},
+        {category: "هندسة الشبكات والأنظمة", question: "ما هو الاختصار الذي يرمز لشبكة النطاق المحلي الصغير المحدود داخل منزل أو مكتب؟", options: ["LAN", "WAN", "MAN", "VPN"], answer: "LAN"},
+        {category: "هندسة الشبكات والأنظمة", question: "ما اسم شبكة الويب العالمية الممتدة التي تربط الدول والقارات ببعضها؟", options: ["WAN", "LAN", "PAN", "SAN"], answer: "WAN"},
+        {category: "هندسة الشبكات والأنظمة", question: "أي منفذ أو بروتوكول يعتبر النسخة الآمنة والمشفرة لتصفح المواقع الإلكترونية؟", options: ["HTTPS", "HTTP", "FTP", "Telnet"], answer: "HTTPS"},
+        {category: "هندسة الشبكات والأنظمة", question: "ماذا يسمى العنوان الفيزيائي الفريد والمثبت بكرت الشبكة لكل جهاز ولا يتغير أبداً؟", options: ["MAC Address", "IP Address", "DNS Client", "URL Code"], answer: "MAC Address"},
 
-        // القسم 4: علوم ورياضيات وثقافة (61-80)
-        {category: "علوم ودراسة", question: "ما هي النظرية الهندسية المستخدمة لحساب أطوال أضلاع المثلث القائم الزاوية؟", options: ["مبرهنة فيثاغورس", "مبرهنة طاليس", "قانون الجيب", "قانون نيوتن"], answer: "مبرهنة فيثاغورس"},
-        {category: "علوم ودراسة", question: "كم يساوي مجموع زوايا أي مثلث في الهندسة المستوية الإقليدية؟", options: ["180 درجة", "90 درجة", "360 درجة", "120 درجة"], answer: "180 درجة"},
-        {category: "علوم ودراسة", question: "أي عضو رئيسي في جسم الإنسان يحتوي على صمامات وشرايين تاجية ومسؤول عن ضخ الدم؟", options: ["القلب", "الكبد", "الرئتين", "الدماغ"], answer: "القلب"},
-        {category: "علوم ودراسة", question: "في مبرهنة طاليس، نستخدم نسب الأضلاع في حال وجود خطين متوازيين يقطعهما خطان متباعدان لحساب ماذا؟", options: ["الأطوال والمسافات", "المساحات الكلية", "الزوايا الحادة", "حجم المجسمات"], answer: "الأطوال والمسافات"},
-        {category: "علوم ودراسة", question: "ما هي العاصمة الحالية لدولة إيطاليا والتي تشتهر بمعلم الكولوسيوم التاريخي؟", options: ["روما", "ميلان", "باريس", "لندن"], answer: "روما"},
-        {category: "علوم ودراسة", question: "ما هي عاصمة المملكة المتحدة (بريطانيا) وتعتبر من أهم المراكز الطبية وجراحة القلب عالمياً؟", options: ["لندن", "مانشستر", "نيويورك", "دبلن"], answer: "لندن"},
-        {category: "علوم ودراسة", question: "ما هو اللقب الشهير المعترف به دولياً لمنتخب كرة القدم الوطني المغربي؟", options: ["أسود الأطلس", "الفراعنة", "النسور", "الخضر"], answer: "أسود الأطلس"},
-        {category: "علوم ودراسة", question: "حلوى مغربية تقليدية مشهورة جداً، تقلى بالزيت وتغطس بالعسل وترتبط بشهر رمضان المبارك:", options: ["الشباكية", "المسمن", "البغرير", "كعب الغزال"], answer: "الشباكية"},
-        {category: "علوم ودراسة", question: "ما هو الاسم الآخر الشهير لدرنات نبات 'حب العزيز' الغذائية والصحية المفيدة؟", options: ["Tiger Nuts (Chufa)", "Almonds", "Walnuts", "Sesame"], answer: "Tiger Nuts (Chufa)"},
-        {category: "علوم ودراسة", question: "ما هي لغة البرمجة التي تشبه قواعد كتابتها اللغة الإنجليزية وتعد الأهم للتعلم الأكاديمي الدولي؟", options: ["اللغة الإنجليزية", "اللغة اليابانية", "اللغة الفرنسية", "اللغة الألمانية"], answer: "اللغة الإنجليزية"},
-        {category: "علوم ودراسة", question: "ما هو الكسر المساوي لنصف العدد 100 في الرياضيات؟", options: ["50", "25", "10", "75"], answer: "50"},
-        {category: "علوم ودراسة", question: "الرمز العلمي للماء في الكيمياء هو:", options: ["H2O", "CO2", "O2", "NaCl"], answer: "H2O"},
-        {category: "علوم ودراسة", question: "ما هي أكبر قارة في العالم من حيث المساحة وعدد السكان؟", options: ["آسيا", "أفريقيا", "أوروبا", "أمريكا الشمالية"], answer: "آسيا"},
-        {category: "علوم ودراسة", question: "العالم الشهير الجاذبية بعد سقوط التفاحة على رأسه هو:", options: ["إسحاق نيوتن", "ألبيرت أينشتاين", "جاليليو", "تسلا"], answer: "إسحاق نيوتن"},
-        {category: "علوم ودراسة", question: "ما هو أصغر كوكب في المجموعة الشمسية؟", options: ["عطارد", "المريخ", "الأرض", "المشتري"], answer: "عطارد"},
-        {category: "علوم ودراسة", question: "أي غاز يمتصه النبات أثناء عملية البناء الضوئي ويطلق بدلاً منه الأكسجين؟", options: ["ثاني أكسيد الكربون", "النيتروجين", "الهيدروجين", "الأرجون"], answer: "ثاني أكسيد الكربون"},
-        {category: "علوم ودراسة", question: "ما هو أسرع حيوان بري على وجه الأرض؟", options: ["الفهد", "الأسد", "الغزال", "الحصان"], answer: "الفهد"},
-        {category: "علوم ودراسة", question: "كم عدد قارات كوكب الأرض؟", options: ["7", "5", "6", "8"], answer: "7"},
-        {category: "علوم ودراسة", question: "ما هو العضو المسؤول عن تصفية الدم وإخراج الفضلات على شكل بول في الجسم؟", options: ["الكلية", "المعدة", "الطحال", "البنكرياس"], answer: "الكلية"},
-        {category: "علوم ودراسة", question: "ما هو العدد الأولي من بين الأعداد التالية؟", options: ["7", "4", "9", "12"], answer: "7"},
+        // === القسم 4: أنظمة التشغيل والتعديل البرمجي (31 - 40) ===
+        {category: "الأنظمة والتعديل البرمجي", question: "ما اسم محاكي نظام لينكس وأسطر الأوامر المتقدم الذي يعمل على الهواتف بدون روت؟", options: ["Termux", "Kali Linux", "Ubuntu Mobile", "CMD Phone"], answer: "Termux"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ما هو نظام التعديل البرمجي الشهير لأجهزة PS4 الذي يمنح صلاحيات كاملة لتشغيل ألعاب المحاكاة؟", options: ["GoldHEN / Jailbreak", "Linux OS", "RetroArch", "Android Mod"], answer: "GoldHEN / Jailbreak"},
+        {category: "الأنظمة والتعديل البرمجي", question: "أي توزيعة من نظام Linux تعتبر الأشهر ومخصصة بالكامل لعمليات اختبار الاختراق والأمن السيبراني؟", options: ["Kali Linux", "Ubuntu", "Fedora", "Mint"], answer: "Kali Linux"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ما هو النظام البرمجي المتكامل الذي يسمح بتشغيل ألعاب الكونسول القديمة ومحاكاتها على أجهزة مختلفة؟", options: ["RetroArch", "GoldHEN", "Termux", "Unity"], answer: "RetroArch"},
+        {category: "الأنظمة والتعديل البرمجي", question: "في أجهزة الماكبوك، ما هو أحدث خط معالجات أبل فائقة القوة المصنعة بالذكاء الاصطناعي؟", options: ["Apple Silicon (M5)", "Intel Core i9", "AMD Ryzen 9", "Snapdragon X"], answer: "Apple Silicon (M5)"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ما اسم نظام تشغيل الهواتف الذكية المملوك لشركة جوجل؟", options: ["Android", "iOS", "Windows Mobile", "Symbian"], answer: "Android"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ما اسم نظام تشغيل الحواسب الشخصية الأوسع انتشاراً من شركة مايكروسوفت؟", options: ["Windows", "macOS", "Linux", "ChromeOS"], answer: "Windows"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ماذا يسمى الجدار البرمجي أو العتادي الذي يحمي الشبكة من الاختراقات والاتصالات الخبيثة؟", options: ["Firewall (جدار الحماية)", "Router", "Switch", "Server"], answer: "Firewall (جدار الحماية)"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ما هي الذاكرة العشوائية المؤقتة في الحاسوب التي تفقد محتواها بالكامل بمجرد فصل الكهرباء؟", options: ["RAM", "ROM", "SSD", "BIOS"], answer: "RAM"},
+        {category: "الأنظمة والتعديل البرمجي", question: "ما هي وحدة التخزين الحديثة والسريعة جداً مقارنة بالهاردات التقليدية HDD؟", options: ["SSD", "RAM", "Floppy Disk", "CD-ROM"], answer: "SSD"},
 
-        // القسم 5: تحديات تقنية متنوعة وعامة (81-100)
-        {category: "تحديات عامة", question: "ما اسم نظام تشغيل الهواتف الذكية المملوك لشركة جوجل؟", options: ["Android", "iOS", "Windows Mobile", "Symbian"], answer: "Android"},
-        {category: "تحديات عامة", question: "ما اسم نظام تشغيل الحواسب الشخصية الأوسع انتشاراً من شركة مايكروسوفت؟", options: ["Windows", "macOS", "Linux", "ChromeOS"], answer: "Windows"},
-        {category: "تحديات عامة", question: "أي جهاز كونسول من شركة Sony حقق لقب جيل الألعاب الرابع؟", options: ["PS4", "PS5", "PS3", "Xbox One"], answer: "PS4"},
-        {category: "تحديات عامة", question: "ما هي لعبة البناء والمكعبات الشهيرة التي تحتوي على عالم لا نهائي ووحوش كالزومبي والاندرمان؟", options: ["Minecraft", "Roblox", "Fortnite", "GTA V"], answer: "Minecraft"},
-        {category: "تحديات عامة", question: "أي تطبيق دردشة يعتبر المفضل والمجتمع الأساسي للاعبين ومطوري الألعاب حول العالم؟", options: ["Discord", "WhatsApp", "Skype", "Zoom"], answer: "Discord"},
-        {category: "تحديات عامة", question: "ماذا يعني الاختصار التقني AI باللغة الإنجليزية؟", options: ["Artificial Intelligence", "Advanced Internet", "Automated Interface", "Active Integration"], answer: "Artificial Intelligence"},
-        {category: "تحديات عامة", question: "ما هو بروتوكول نقل الملفات الشهير عبر الشبكة؟", options: ["FTP", "HTTP", "SMTP", "DNS"], answer: "FTP"},
-        {category: "تحديات عامة", question: "في أجهزة الماكبوك، ما هو أحدث خط معالجات أبل فائقة القوة حتى الآن؟", options: ["M-Series (M5)", "Intel Core i9", "AMD Ryzen 9", "Snapdragon X"], answer: "M-Series (M5)"},
-        {category: "تحديات عامة", question: "ما اسم تطبيق المتصفح الشهير التابع لشركة جوجل؟", options: ["Google Chrome", "Firefox", "Safari", "Edge"], answer: "Google Chrome"},
-        {category: "تحديات عامة", question: "في لوحة مفاتيح الكمبيوتر، ما هو الزر الأكبر والمستخدم لعمل مسافة؟", options: ["Spacebar", "Enter", "Shift", "Backspace"], answer: "Spacebar"},
-        {category: "تحديات عامة", question: "ما هي التقنية اللاسلكية المستخدمة لربط الملحقات (كالفأرة والسماعات) بالكمبيوتر لمسافات قصيرة؟", options: ["Bluetooth", "Wi-Fi", "Infrared", "NFC"], answer: "Bluetooth"},
-        {category: "تحديات عامة", question: "ما اسم الشركة المالكة لتطبيقات فيسبوك، واتساب، وإنستغرام؟", options: ["Meta", "Google", "Microsoft", "Apple"], answer: "Meta"},
-        {category: "تحديات عامة", question: "أي كابل يستخدم بشكل أساسي لنقل الصورة والصوت بدقة عالية جداً من الكونسول إلى التلفاز؟", options: ["HDMI", "VGA", "USB", "AUX"], answer: "HDMI"},
-        {category: "تحديات عامة", question: "ما هو المصطلح التقني الذي يعبر عن الثغرات أو الأخطاء البرمجية المفاجئة في الألعاب؟", options: ["Glitch / Bug", "Feature", "Update", "Patch"], answer: "Glitch / Bug"},
-        {category: "تحديات عامة", question: "كم عدد البتات (Bits) التي تشكل حزمة بايت واحد (1 Byte)؟", options: ["8", "4", "16", "1024"], answer: "8"},
-        {category: "تحديات عامة", question: "ما هي اللعبة الجماعية الشهيرة التي تعتمد على البحث عن الخائن (Imposter) داخل سفينة فضائية؟", options: ["Among Us", "Fall Guys", "PUBG", "Valorant"], answer: "Among Us"},
-        {category: "تحديات عامة", question: "ما اسم متجر التطبيقات الرسمي المتواجد على كافة هواتف أندرويد؟", options: ["Google Play Store", "App Store", "Huawei AppGallery", "Steam"], answer: "Google Play Store"},
-        {category: "تحديات عامة", question: "في الويب، ماذا يرمز الاختصار المشهور URL؟", options: ["رابط الموقع الإلكتروني", "اسم الخادم الرئيسي", "حزمة التشفير الأمنية", "قاعدة البيانات المحمية"], answer: "رابط الموقع الإلكتروني"},
-        {category: "تحديات عامة", question: "ما هو الحيوان المصمم كشعار لمتصفح الويب الشهير Firefox؟", options: ["ثعلب الأحمر", "ذئب قطبي", "حيوان الباندا", "النمر الآسيوي"], answer: "ثعلب الأحمر"},
-        {category: "تحديات عامة", question: "ما اسم جهاز الألعاب المحمول الهجين من شركة نينتندو والذي يمكن فصل أذرع التحكم عنه؟", options: ["Nintendo Switch", "PSP", "GameBoy", "Nintendo DS"], answer: "Nintendo Switch"}
+        // === القسم 5: الرياضيات والهندسة (41 - 50) ===
+        {category: "الرياضيات والهندسة", question: "ما هي النظرية الهندسية المستخدمة لحساب أطوال أضلاع المثلث القائم الزاوية؟", options: ["مبرهنة فيثاغورس", "مبرهنة طاليس", "قانون الجيب", "قانون نيوتن"], answer: "مبرهنة فيثاغورس"},
+        {category: "الرياضيات والهندسة", question: "كم يساوي مجموع زوايا أي مثلث في الهندسة المستوية الإقليدية؟", options: ["180 درجة", "90 درجة", "360 درجة", "120 درجة"], answer: "180 درجة"},
+        {category: "الرياضيات والهندسة", question: "في مبرهنة طاليس، نستخدم نسب الأضلاع عند وجود خطوط متوازية لحساب ماذا؟", options: ["الأطوال والمسافات", "المساحات الكلية", "الزوايا الحادة", "حجم المجسمات"], answer: "الأطوال والمسافات"},
+        {category: "الرياضيات والهندسة", question: "ما هو الكسر المساوي لنصف العدد 100 في الرياضيات؟", options: ["50", "25", "10", "75"], answer: "50"},
+        {category: "الرياضيات والهندسة", question: "ما هو العدد الأولي من بين الأعداد التالية؟", options: ["7", "4", "9", "12"], answer: "7"},
+        {category: "الرياضيات والهندسة", question: "ما هو قياس الزاوية القائمة بالدرجات؟", options: ["90 درجة", "45 درجة", "180 درجة", "360 درجة"], answer: "90 درجة"},
+        {category: "الرياضيات والهندسة", question: "ما هو ناتج ضرب العدد 7 في العدد 8؟", options: ["56", "54", "64", "49"], answer: "56"},
+        {category: "الرياضيات والهندسة", question: "ماذا يسمى المضلع الهندسي الذي يتكون من 5 أضلاع؟", options: ["خماسي الأضلاع", "رباعي الأضلاع", "سداسي الأضلاع", "مثلث"], answer: "خماسي الأضلاع"},
+        {category: "الرياضيات والهندسة", question: "ما هو الجذر التربيعي للعدد 64؟", options: ["8", "6", "7", "9"], answer: "8"},
+        {category: "الرياضيات والهندسة", question: "ما هو قانون حساب مساحة المستطيل؟", options: ["الطول × العرض", "الطول + العرض", "الضلع × 4", "نصف القاعدة × الارتفاع"], answer: "الطول × العرض"},
+
+        // === القسم 6: علم الأحياء وطب جراحة القلب (51 - 60) ===
+        {category: "الأحياء وجراحة القلب", question: "أي عضو رئيسي في جسم الإنسان يحتوي على صمامات وشرايين تاجية ومسؤول عن ضخ الدم؟", options: ["القلب", "الكبد", "الرئتين", "الدماغ"], answer: "القلب"},
+        {category: "الالأحياء وجراحة القلب", question: "ما هو اسم الشريان الأكبر والأضخم في جسم الإنسان والذي يخرج مباشرة من القلب؟", options: ["الشريان الأبهر (الأورطي)", "الشريان الرئوي", "الشريان السباتي", "الوريد الأجوف"], answer: "الشريان الأبهر (الأورطي)"},
+        {category: "الالأحياء وجراحة القلب", question: "كم عدد حجرات قلب الإنسان البالغ؟", options: ["أربع حجرات", "حجرتان", "ثلاث حجرات", "خمس حجرات"], answer: "أربع حجرات"},
+        {category: "الالأحياء وجراحة القلب", question: "ماذا يسمى الطبيب الجراح المتخصص في إصلاح صمامات القلب المعتلة وإجراء عمليات قلب مفتوح؟", options: ["جراح القلب والأوعية", "طبيب الأعصاب", "جراح العظام", "طبيب العيون"], answer: "جراح القلب والأوعية"},
+        {category: "الالأحياء وجراحة القلب", question: "ما هو العضو المسؤول عن تصفية الدم وإخراج الفضلات والسوائل الزائدة على شكل بول؟", options: ["الكلية", "المعدة", "الطحال", "البنكرياس"], answer: "الكلية"},
+        {category: "الالأحياء وجراحة القلب", question: "ما هي فصيلة الدم التي تُعرف بـ 'المستقبل العام' لأنها تستقبل من جميع الفصائل؟", options: ["AB+", "O-", "A+", "B-"], answer: "AB+"},
+        {category: "الالأحياء وجراحة القلب", question: "كم عدد العظام في جسم الإنسان البالغ؟", options: ["206 عظمة", "300 عظمة", "150 عظمة", "250 عظمة"], answer: "206 عظمة"},
+        {category: "الالأحياء وجراحة القلب", question: "أي نوع من الخلايا في دم الإنسان مسؤول عن محاربة الأمراض والميكروبات؟", options: ["خلايا الدم البيضاء", "خلايا الدم الحمراء", "الصفائح الدموية", "البلازما"], answer: "خلايا الدم البيضاء"},
+        {category: "الالأحياء وجراحة القلب", question: "ما هي الوحدة الأساسية والتركيبية لبناء الكائنات الحية؟", options: ["الخلية", "الذرة", "الجزيء", "النسيج"], answer: "الخلية"},
+        {category: "الالأحياء وجراحة القلب", question: "ما هو الصمام الذي يفصل بين الأذين الأيسر والبطين الأيسر في قلب الإنسان؟", options: ["الصمام المترالي (التاجي)", "الصمام ثلاثي الشرفات", "الصمام الأورطي", "الصمام الرئوي"], answer: "الصمام المترالي (التاجي)"},
+
+        // === القسم 7: الجغرافيا والعواصم العالمية (61 - 70) ===
+        {category: "الجغرافيا والعواصم", question: "ما هي العاصمة الحالية لدولة إيطاليا والتي تشتهر بمعلم الكولوسيوم التاريخي؟", options: ["روما", "ميلان", "باريس", "لندن"], answer: "روما"},
+        {category: "الجغرافيا والعواصم", question: "ما هي عاصمة المملكة المتحدة (بريطانيا) وتعتبر وجهة الضباب الشهيرة؟", options: ["لندن", "مانشستر", "برمنغهام", "أكسفورد"], answer: "لندن"},
+        {category: "الجغرافيا والعواصم", question: "ما هي أكبر قارة في العالم من حيث المساحة الكلية وعدد السكان؟", options: ["آسيا", "أفريقيا", "أوروبا", "أمريكا الشمالية"], answer: "آسيا"},
+        {category: "الجغرافيا والعواصم", question: "أي محيط يعتبر الأكبر والأعمق على وجه الأرض؟", options: ["المحيط الهادئ", "المحيط الأطلسي", "المحيط الهندي", "المحيط المتجمد الشمالي"], answer: "المحيط الهادئ"},
+        {category: "الجغرافيا والعواصم", question: "ما النهر الذي يعتبر الأطول في العالم ويقع في القارة الأفريقية؟", options: ["نهر النيل", "نهر الأمازون", "نهر الميسيسيبي", "نهر اليانغتسي"], answer: "نهر النيل"},
+        {category: "الجغرافيا والعواصم", question: "ما هي عاصمة دولة اليابان وتشتهر بالتطور التقني المذهل وأشجار الكرز؟", options: ["طوكيو", "كيوتو", "أوساكا", "هيروشيما"], answer: "طوكيو"},
+        {category: "الجغرافيا والعواصم", question: "ما هي أصغر دولة في العالم من حيث المساحة وتقع داخل مدينة روما؟", options: ["الفاتيكان", "موناكو", "سان مارينو", "أندورا"], answer: "الفاتيكان"},
+        {category: "الجغرافيا والعواصم", question: "ما هي السلسلة الجبلية الأعلى في العالم والتي تحتوي على قمة إيفريست؟", options: ["جبال الهيمالايا", "جبال الأنديز", "جبال الألب", "جبال الأطلس"], answer: "جبال الهيمالايا"},
+        {category: "الجغرافيا والعواصم", question: "ما هي عاصمة فرنسا وتُلقب بمدينة الأنوار؟", options: ["باريس", "مارسيليا", "ليون", "نييس"], answer: "باريس"},
+        {category: "الجغرافيا والعواصم", question: "ما هي أكبر دولة في العالم من حيث المساحة الجغرافية الكلية؟", options: ["روسيا", "كندا", "الصين", "الولايات المتحدة"], answer: "روسيا"},
+
+        // === القسم 8: تاريخ وحضارات العالم (71 - 80) ===
+        {category: "التاريخ والحضارات", question: "في أي بلد توجد أهرامات الجيزة الشهيرة وأبو الهول؟", options: ["مصر", "السودان", "الأردن", "العراق"], answer: "مصر"},
+        {category: "التاريخ والحضارات", question: "أي قناة مائية اصطناعية افتتحت تاريخياً لتربط بين البحر الأبيض المتوسط والبحر الأحمر؟", options: ["قناة السويس", "قناة بنما", "مضيق هرمز", "مضيق باب المندب"], answer: "قناة السويس"},
+        {category: "التاريخ والحضارات", question: "الدولة المعاصرة التي قامت على أرضها حضارة المايا التاريخية هي:", options: ["المكسيك", "مصر", "اليونان", "إيطاليا"], answer: "المكسيك"},
+        {category: "التاريخ والحضارات", question: "في أي عام اندلعت الحرب العالمية الأولى في أوروبا؟", options: ["1914", "1939", "1918", "1945"], answer: "1914"},
+        {category: "التاريخ والحضارات", question: "من هو المكتشف التاريخي الذي ينسب إليه الوصول للأمريكتين عام 1492؟", options: ["كريستوفر كولومبوس", "فاسكو دا غاما", "ماجلان", "ابن بطوطة"], answer: "كريستوفر كولومبوس"},
+        {category: "التاريخ والحضارات", question: "أين تقع المعالم التاريخية لمدينة البتراء الوردية المنحوتة في الصخر؟", options: ["الأردن", "سوريا", "مصر", "العراق"], answer: "الأردن"},
+        {category: "التاريخ والحضارات", question: "ما هي الحضارة القديمة التي اشتهرت ببناء 'مدرج الكولوسيوم'؟", options: ["الحضارة الرومانية", "الحضارة الإغريقية", "الحضارة الفرعونية", "حضارة بابل"], answer: "الحضارة الرومانية"},
+        {category: "التاريخ والحضارات", question: "من هو القائد الشهير الذي أسس الإمبراطورية الفرنسية واحتل أجزاء واسعة من أوروبا في القرن 19؟", options: ["نابليون بونابرت", "لويس الرابع عشر", "شارلمان", "يوليوس قيصر"], answer: "نابليون بونابرت"},
+        {category: "التاريخ والحضارات", question: "أي رحالة مغربي شهير يعتبر من أعظم الجغرافيين وقام برحلة استمرت 30 عاماً زار فيها آسيا وأفريقيا؟", options: ["ابن بطوطة", "الإدريسي", "ابن خلدون", "ابن ماجد"], answer: "ابن بطوطة"},
+        {category: "التاريخ والحضارات", question: "ما اسم الثورة التاريخية التي اندلعت عام 1789 وشكلت نقطة تحول كبرى في سياسة أوروبا؟", options: ["الثورة الفرنسية", "الثورة الصناعية", "الثورة الأمريكية", "الثورة الروسية"], answer: "الثورة الفرنسية"},
+
+        // === القسم 9: كرة القدم والمنتخب المغربي (81 - 90) ===
+        {category: "كرة القدم والرياضة", question: "ما هو اللقب الشهير الرسمي لمنتخب كرة القدم الوطني المغربي؟", options: ["أسود الأطلس", "الفراعنة", "النسور", "الخضر"], answer: "أسود الأطلس"},
+        {category: "كرة القدم والرياضة", question: "أي منتخب وطني فاز بلقب كأس العالم لكرة القدم الأخيرة في قطر لعام 2022؟", options: ["الأرجنتين", "فرنسا", "البرازيل", "المغرب"], answer: "الأرجنتين"},
+        {category: "كرة القدم والرياضة", question: "ما هو النادي الإسباني العريق الذي يلقب بـ 'الملكي' ويملك الرقم القياسي في دوري أبطال أوروبا Mom؟", options: ["ريال مدريد", "برشلونة", "أتلتيكو مدريد", "فالنسيا"], answer: "ريال مدريد"},
+        {category: "كرة القدم والرياضة", question: "من هو اللاعب التاريخي الذي يلقب بـ 'البرغوث' وحقق الكرة الذهبية لمرات قياسية؟", options: ["ليونيل ميسي", "كريستيانو رونالدو", "كيليان مبابي", "نيمار داسيلفا"], answer: "ليونيل ميسي"},
+        {category: "كرة القدم والرياضة", question: "في أي مدينة مغربية يتواجد مركب محمد الخامس الرياضي الشهير؟", options: ["الدار البيضاء", "الرباط", "مراكش", "طنجة"], answer: "الدار البيضاء"},
+        {category: "كرة القدم والرياضة", question: "من هو النجم المغربي الحارس العملاق الذي تألق في مونديال قطر 2022؟", options: ["ياسين بونو", "منير المحمدي", "أشرف حكيمي", "حكيم زياش"], answer: "ياسين بونو"},
+        {category: "كرة القدم والرياضة", question: "ما هو اسم النجم المغربي ظهير نادي باريس سان جيرمان الفرنسي؟", options: ["أشرف حكيمي", "سفيان أمرابط", "عز الدين أوناحي", "نايف أكرد"], answer: "أشرف حكيمي"},
+        {category: "كرة القدم والرياضة", question: "من هو المدرب الوطني التاريخي الذي قاد أسود الأطلس لنصف نهائي مونديال قطر؟", options: ["وليد الركراكي", "بادو الزاكي", "هيرفي رينارد", "وحيد خليلوزيتش"], answer: "وليد الركراكي"},
+        {category: "كرة القدم والرياضة", question: "من هو العداء الأسطوري المغربي صاحب الميداليات الذهبية والرقام القياسية في المسافات الطويلة (1500 متر)؟", options: ["هشام الكروج", "سعيد عويطة", "سفيان البقالي", "جواد غريب"], answer: "هشام الكروج"},
+        {category: "كرة القدم والرياضة", question: "كم عدد اللاعبين الأساسيين داخل الملعب لفريق واحد في مباراة كرة القدم الرسمية؟", options: ["11 لاعباً", "10 لاعبين", "12 لاعباً", "9 لاعبين"], answer: "11 لاعباً"},
+
+        // === القسم 10: المطبخ والثقافة المغربية (91 - 100) ===
+        {category: "المطبخ والثقافة المغربية", question: "حلوى مغربية تقليدية مشهورة جداً، تقلى بالزيت وتغطس بالعسل وترتبط أساساً بشهر رمضان:", options: ["الشباكية", "المسمن", "البغرير", "كعب الغزال"], answer: "الشباكية"},
+        {category: "المطبخ والثقافة المغربية", question: "ما هو الاسم الآخر الشهير لدرنات نبات 'حب العزيز' الغذائية اللذيذة والصحية؟", options: ["Tiger Nuts (Chufa)", "Almonds", "Walnuts", "Sesame"], answer: "Tiger Nuts (Chufa)"},
+        {category: "المطبخ والثقافة المغربية", question: "ما هي بذور النبات الزيتية الصغيرة المستخدمة بكثرة لتزيين الشباكية وإعطاء نكهة للحلويات المغربية؟", options: ["السمسم (الجلجلان)", "حبة البركة", "بذور الكتان", "اليانسون"], answer: "السمسم (الجلجلان)"},
+        {category: "المطبخ والثقافة المغربية", question: "وجبة مغربية وطنية عريقة تُحضر يوم الجمعة بسبع خضار ودقيق القمح المستدير:", options: ["الكسكس", "الرفيسة", "البسطيلة", "الحريرة"], answer: "الكسكس"},
+        {category: "المطبخ والثقافة المغربية", question: "شوربة مغربية رمضانية أساسية، حمراء اللون غنية بالحمّص، العدس، الطماطم والكزبرة:", options: ["الحريرة", "البيصارة", "شوربة الخضار", "شوربة الدشيشة"], answer: "الحريرة"},
+        {category: "المطبخ والثقافة المغربية", question: "أكلة تقليدية مغربية شهيرة تُصنع من رقائق العجين (التريد) والدجاج والحلية ومرق الحلبة:", options: ["الرفيسة", "السفة المدفونة", "البسطيلة", "التقلية"], answer: "الرفيسة"},
+        {category: "المطبخ والثقافة المغربية", question: "حلوى مغربية راقية جداً على شكل هلال، تحشى باللوز المطحون ومياه الزهر المعطرة:", options: ["كعب الغزال", "الفقاص", "الغريبة", "المحنشة"], answer: "كعب الغزال"},
+        {category: "المطبخ والثقافة المغربية", question: "ما اسم الزيت النادر والفاخر المستخرج من أشجار تنمو فقط في جنوب المغرب واستخدم للتجميل والطبخ؟", options: ["زيت الأركان", "زيت الزيتون", "زيت اللوز", "زيت السمسم"], answer: "زيت الأركان"},
+        {category: "المطبخ والثقافة المغربية", question: "ما هي أقدم جامعة مستمرة في العالم وتوجد في مدينة فاس المغربية وبنتها فاطمة الفهرية؟", options: ["جامعة القرويين", "جامعة الأزهر", "جامعة أكسفورد", "جامعة بولونيا"], answer: "جامعة القرويين"},
+        {category: "المطبخ والثقافة المغربية", question: "ما هو نوع الصناعة التقليدية الفخارية المعتمدة على الفسيفساء الطينية الملونة التي تشتهر بها فاس وسلا؟", options: ["الزليج المغربي", "النحاسيات", "النقش على الخشب", "صناعة الجلود"], answer: "الزليج المغربي"}
     ];
 
     let currentQIndex = 0;
     let currentPlayer = 1;
-    let playerAnswers = {}; // لتخزين إجابة كل لاعب في الجولة الحالية
+    let playerAnswers = {}; 
     let playerScores = {1: 0, 2: 0, 3: 0, 4: 0};
 
     const tvHeader = document.getElementById('tvHeader');
@@ -361,16 +366,13 @@
         if (currentQIndex < qList.length) {
             let qData = qList[currentQIndex];
             
-            // تحديث الترويسة بالقسم وعداد الأسئلة
             tvHeader.innerText = `السؤال الحالي: ${currentQIndex + 1} من أصل ${qList.length} | القسم: [ ${qData.category} ]`;
             tvQuestion.innerText = qData.question;
             
-            // إدارة الأزرار وعرض الخيارات الأربعة
             for (let i = 0; i < 4; i++) {
                 buttons[i].innerText = qData.options[i];
             }
             
-            // تحديث بطاقات اللاعبين لإظهار الدور النشط الحالي
             updatePlayerCards();
         } else {
             showFinalLeaderboard();
@@ -380,7 +382,7 @@
     function updatePlayerCards() {
         for (let p = 1; p <= 4; p++) {
             let card = document.getElementById(`pCard${p}`);
-            card.className = "player-card"; // ريست
+            card.className = "player-card"; 
             
             if (p === currentPlayer) {
                 card.classList.add("active");
@@ -392,16 +394,12 @@
 
     function selectOption(btnIdx) {
         let selectedText = buttons[btnIdx].innerText;
-        
-        // حفظ إجابة اللاعب الحالي للتحقق منها لاحقاً عند اكتمال جولة اللاعبين الأربعة
         playerAnswers[currentPlayer] = selectedText;
 
-        // التحقق من الانتقال للاعب التالي أو إظهار النتيجة الجولة
         if (currentPlayer < 4) {
             currentPlayer++;
             updateQuiz();
         } else {
-            // كنز التحقق: الأربعة لاعبين اختاروا إجاباتهم بالكامل!
             evaluateRoundAnswers();
         }
     }
@@ -414,7 +412,7 @@
         for (let p = 1; p <= 4; p++) {
             let statusIcon = "❌";
             if (playerAnswers[p] === correctAnswer) {
-                playerScores[p]++; // إضافة نقطة لسكور اللاعب الصحيح
+                playerScores[p]++; 
                 statusIcon = "✅";
             }
             reportHtml += `
@@ -426,28 +424,23 @@
         }
 
         modalText.innerHTML = reportHtml;
-        correctAnswerReveal.innerText = `💡 الإجابة الصحيحة الفخرية هي: ${correctAnswer}`;
+        correctAnswerReveal.innerText = `💡 الإجابة الصحيحة هي: ${correctAnswer}`;
         modal.style.display = "flex";
     }
 
     function nextQuestion() {
         modal.style.display = "none";
-        
-        // تصفير إعدادات الجولة استعداداً للسؤال القادم
         currentPlayer = 1;
         playerAnswers = {};
         currentQIndex++;
-        
         updateQuiz();
     }
 
     function showFinalLeaderboard() {
-        // إيقاف الواجهات العادية
         tvHeader.style.display = 'none';
         document.querySelector('.players-radar').style.display = 'none';
         document.getElementById('buttonsContainer').style.display = 'none';
         
-        // فرز وترتيب السكور لمعرفة بطل الاستوديو الفائز
         let sortedPlayers = Object.keys(playerScores).map(p => {
             return { id: p, score: playerScores[p] };
         }).sort((a, b) => b.score - a.score);
@@ -469,7 +462,6 @@
         tvQuestion.innerHTML += leaderboardHtml;
     }
 
-    // انطلاق محرك اللعبة
     updateQuiz();
 </script>
 
